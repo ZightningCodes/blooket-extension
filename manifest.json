@@ -1,0 +1,35 @@
+{
+    "manifest_version": 2,
+    "name": "Blooket Hack",
+    "description": "OneMinesraft2's Blooket Cheat",
+    "version": "3.4.4",
+    "permissions": [
+        "tabs",
+        "webRequest",
+        "webRequestBlocking",
+        "debugger",
+        "<all_urls>"
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": true
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.blooket.com/*"
+            ],
+            "js": [
+                "content.js",
+                "jwt-decode.js"
+            ]
+        }
+    ],
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_title": "Blooket Hack"
+    },
+    "web_accessible_resources" : ["*ata.js"]
+}

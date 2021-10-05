@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body style="background-color:#f7f7f7;">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titan%20One|Nunito">
+    <div class="navbar">
+        <text class="h1">Blooket Cheats</text>
+    </div>
+    <div>
+        <div class="pageContainer">
+            <div class="headerText">Cheats</div>
+            <details>
+                <summary class="detailText">Global</summary>
+                <button id="getTokens">Get Daily Tokens</button><br><br>
+
+                <input placeholder="Box name (e.g. 'Space')" type="text" maxlength="64" id="boxInput" /><input
+                    placeholder="Amount to open" type="number" min=0 maxlength="64" id="boxAmountInput" /><button
+                    id="openBoxes">Open Boxes</button>
+                <br style='display: block; content: ""; margin-top: 0px;'><text style="color: black;"> &#9888; (Note: Please wait for it to finish before auto
+                    selling)</text><br><br>
+
+                <button id="autoSell">Auto Sell</button><br><br>
+
+                <button id="autoAnswer">Auto Answer</button> <text style="color: black;"> Click only ingame or in
+                    lobby,
+                    can't be
+                    disabled</text><br><br>
+                <button id="blookSpoof">Spoof Blooks</button>
+            </details>
+            <details>
+                <summary class="detailText">Gold Quest</summary>
+                <button id="chestESP">Chest ESP</button><text style="color: black;"> &#9888; (Note: auto answer
+                    may
+                    interfere
+                    with this, and it may break after a while)</text><br><br>
+                <input placeholder="Gold" type="number" min=0 max=1000000000000 id="gold" /><button id="setGold">Set
+                    Gold</button>
+            </details>
+            <details>
+                <summary class="detailText">Crypto Hack</summary>
+                <button id="getPassword">Auto Password</button><br><br>
+                <input placeholder="Crypto" type="number" min=0 max=1000000000000 id="crypto" /><button
+                    id="setCrypto">Set
+                    Crypto</button>
+            </details>
+            <details>
+                <summary class="detailText">Fishing Frenzy</summary>
+                <input placeholder="Lure" max=5 min=1 type="number" maxlength=1 style="width: 37px;"
+                    id="lureLevel" /><button id="setLure">Set
+                    Lure</button><br><br>
+                <input placeholder="Weight" type="number" min=0 max=1000000000000 id="weight" /><button
+                    id="setWeight">Set
+                    Weight</button>
+            </details>
+        </div>
+    </div>
+
+    <script src="jwt-decode.js" charset="UTF-8"></script>
+    <script src="popup.js" charset="UTF-8"></script>
+</body>
+
+</html>
