@@ -2,7 +2,7 @@ const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('getTokens').addEventListener('click', async () => {
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-            chrome.tabs.sendMessage(tabs[0].id, ['tokens'])
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'getTokens' })
         })
     }, false)
     document.getElementById('openBoxes').addEventListener('click', async () => {
@@ -90,6 +90,18 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!Number(value.value)) value.value = "";
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setWeight', args: [Number(value.value)] })
+        })
+    }, false)
+    document.getElementById('setCoins').addEventListener('click', async () => {
+        let value = document.getElementById('coins')
+        if (!Number(value.value)) value.value = "";
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setCoins', args: [Number(value.value)] })
+        })
+    }, false)
+    document.getElementById('infiniteFood').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'infiniteFood' })
         })
     }, false)
 }, false)

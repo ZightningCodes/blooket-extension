@@ -2,7 +2,7 @@ let token = localStorage.getItem("token");
 requestIdleCallback(init);
 const getData = () => JSON.parse(localStorage.data)[window.location.pathname]
 setData = async (data) => {
-    let src = chrome.runtime.getURL("setData.js");
+    let src = chrome.runtime.getURL("data/setData.js");
     let script = (await (await fetch(src)).text()).replace(/OneMinesraft26969/g, JSON.stringify(data));
     let element = document.createElement("script");
     element.type = "text/javascript";
@@ -12,7 +12,7 @@ setData = async (data) => {
     document.getElementById('setData').remove();
 }
 updateData = () => {
-    let src = chrome.runtime.getURL("updateData.js");
+    let src = chrome.runtime.getURL("data/updateData.js");
     let element = document.createElement("script");
     element.type = "text/javascript";
     element.src = src;
@@ -23,7 +23,7 @@ updateData = () => {
     }, 50)
 }
 let Cheats = {
-    'tokens': { run: giveTokens },
+    'getTokens': { run: getTokens },
     'openBoxes': { run: openBoxes },
     'autoSell': { run: autoSell },
     'autoAnswer': { run: autoAnswer },
@@ -33,12 +33,15 @@ let Cheats = {
     'getPassword': { run: getPassword },
     'setCrypto': { run: setCrypto },
     'setLure': { run: setLure },
-    'setWeight': { run: setWeight }
+    'setWeight': { run: setWeight },
+    'setCoins': { run: setCoins },
+    'infiniteFood': { run: infiniteFood }
 };
 chrome.runtime.onMessage.addListener((message) => {
     message.cheat && Cheats[message.cheat].run(message.args);
 });
-async function giveTokens() {
+async function getTokens() {
+    console.log('hello')
     var name = window.jwt_decode(token.replace("JWT ", "")).name;
     fetch("https://api.blooket.com/api/users/addtokens", {
         headers: {
@@ -145,11 +148,8 @@ async function autoAnswer() {
     alert("Auto answer enabled");
     let interval = setInterval(() => {
         let data = getData();
-        if (document.getElementById("qText")) {
-            Array.from(document.querySelectorAll('div')).find((a) =>
-                a.innerHTML == data.question.correctAnswers[0] && a.parentElement.id != 'qText'
-            ).parentElement.parentElement.click()
-        }
+        let filter = a => a.innerHTML == data.question.correctAnswers[0] && a.parentElement.id != 'qText'
+        if (document.getElementById("qText")) Array.from(document.querySelectorAll('div')).find(filter).parentElement.parentElement.click();
         document.getElementsByClassName("arts__regularBody___1st6G-camelCase styles__background___30vso-camelCase")[0]?.click();
         document.getElementsByClassName("styles__feedbackContainer___ttxTX-camelCase")[0]?.click();
         document.getElementsByClassName("arts__regularBody___1st6G-camelCase")[0]?.click();
@@ -174,28 +174,21 @@ async function chestESP() {
             boxes = data.choices;
             choiceDiv = document.querySelector("div[class*='arts__regularBody']")?.children[1];
             if (!choiceDiv) return clearInterval(interval)
-            if (!document.querySelector("style[class*='chest-esp_style']")) {
-                style = document.createElement('style');
-                style.className = "chest-esp_style";
-                style.innerText = `.chest-esp {
-    text-align: center;
-    font-size: 30px;
-    color: white;
-    font-family:Titan One;
-    sans-serif;
-    -webkit-user-select:none;
-    -moz-user-select:none;
-    -ms-user-select:none;
-    user-select:none;
-    border-color: black;
-    line-height: 350px;
-}`;
-                choiceDiv.appendChild(style);
-            };
             if (!document.querySelector("p[class*='chest-esp']")) boxes.forEach((box, i) => {
                 textElement = document.createElement('p');
                 textElement.className = "chest-esp";
                 textElement.innerText = box.text;
+                textElement.style = `text-align: center;
+font-size: 30px;
+color: white;
+font-family:Titan One;
+sans-serif;
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+user-select:none;
+border-color: black;
+line-height: 350px;`
                 try { choiceDiv.children[i].appendChild(textElement); } catch (e) { }
             });
         };
@@ -209,7 +202,7 @@ function setGold(args) {
     alert('Set gold to ' + gold);
     updateData();
 }
-async function getBlooks() {
+function getBlooks() {
     if (window.location.pathname == '/blooks') {
         setData({ blooks: getData().allBlooks });
         updateData();
@@ -249,13 +242,39 @@ function setWeight(args) {
     alert('Set weight to ' + weight)
     updateData();
 }
-
-
+function setCoins(args) {
+    let [cafeCash] = args;
+    if (!window.location.pathname.includes('/cafe')) return alert('You must be in a cafe game!');
+    setData({ cafeCash })
+    alert('Set cash to ' + cafeCash)
+    updateData();
+}
+function infiniteFood() {
+    if (!window.location.pathname.includes('/cafe')) return alert('You must be in a cafe game!');
+    if (window.location.pathname != '/cafe/shop') Array.from(document.querySelectorAll('div')).find(e => e.innerHTML == "Upgrade Shop").click();
+    let items = getData().items;
+    Object.keys(items).forEach(item => items[item] = 5);
+    setData({ items })
+    updateData();
+    setTimeout(() => {
+        setData({ items })
+        updateData();
+        setTimeout(() => {
+            Array.from(document.querySelectorAll('div')).find(e => e.innerHTML == "Back").click();
+            let foods = getData().foods.map(food => ({ name: food.name, level: 5, stock: 999999 }));
+            setTimeout(() => {
+                setData({ foods });
+                updateData();
+            }, 333)
+        }, 333);
+    }, 333)
+    alert('Set food to infinity!');
+}
 
 
 
 function init() {
-    let src = chrome.runtime.getURL("data.js");
+    let src = chrome.runtime.getURL("data/data.js");
     let element = document.createElement("script");
     element.type = "text/javascript";
     element.src = src;
