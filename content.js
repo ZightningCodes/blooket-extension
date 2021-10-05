@@ -2,7 +2,7 @@ let token = localStorage.getItem("token");
 requestIdleCallback(init);
 const getData = () => JSON.parse(localStorage.data)[window.location.pathname]
 setData = async (data) => {
-    let src = chrome.runtime.getURL("data/setData.js");
+    let src = chrome.runtime.getURL("utils/setData.js");
     let script = (await (await fetch(src)).text()).replace(/OneMinesraft26969/g, JSON.stringify(data));
     let element = document.createElement("script");
     element.type = "text/javascript";
@@ -12,7 +12,7 @@ setData = async (data) => {
     document.getElementById('setData').remove();
 }
 updateData = () => {
-    let src = chrome.runtime.getURL("data/updateData.js");
+    let src = chrome.runtime.getURL("utils/updateData.js");
     let element = document.createElement("script");
     element.type = "text/javascript";
     element.src = src;
@@ -274,7 +274,7 @@ function infiniteFood() {
 
 
 function init() {
-    let src = chrome.runtime.getURL("data/data.js");
+    let src = chrome.runtime.getURL("utils/data.js");
     let element = document.createElement("script");
     element.type = "text/javascript";
     element.src = src;
