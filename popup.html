@@ -19,7 +19,7 @@
                 <div class="detailContainer">
                     <details>
                         <summary class="detailText">Global</summary>
-                        <div class="detailContainer"><button id="getTokens">Get Daily Tokens</button><br><br>
+                        <div class="detailContainer"><button id="getTokens">Get Daily Tokens</button><br>
 
                             <input placeholder="Box name (e.g. 'Space')" type="text" maxlength="64"
                                 id="boxInput" /><input placeholder="Amount to open" type="number" min=0 maxlength="64"
@@ -28,16 +28,16 @@
                                 &#9888;
                                 (Note:
                                 Please wait for it to finish before auto
-                                selling)</text><br><br>
+                                selling)</text><br style='display: block; content: ""; margin-top: 16.5px;'>
 
-                            <button id="autoSell">Auto Sell</button><br><br>
+                            <button id="autoSell">Auto Sell</button><br>
 
                             <button id="autoAnswer">Auto Answer</button> <text style="color: black;"> Click only ingame
                                 or
                                 in
                                 lobby,
                                 can't be
-                                disabled</text><br><br>
+                                disabled</text><br>
                             <button id="blookSpoof">Spoof Blooks</button>
                         </div>
                     </details>
@@ -45,25 +45,28 @@
                         <summary class="detailText">Café</summary>
                         <div class="detailContainer"><input placeholder="Cash" type="number" min=0
                                 id="coins" />&nbsp<button id="setCoins">Set
-                                Cash</button><br><br>
+                                Cash</button><br>
                             <button id="infiniteFood">Infinite Food Level</button>
                         </div>
                     </details>
                     <details>
                         <summary class="detailText">Crypto Hack</summary>
-                        <div class="detailContainer"><button id="getPassword">Auto Password</button><br><br>
+                        <div class="detailContainer">
+                            <button id="getPassword">Auto Password</button><br>
                             <input placeholder="Crypto" type="number" min=0 id="crypto" />&nbsp<button
                                 id="setCrypto">Set
-                                Crypto</button>
+                                Crypto</button><br>
+                            <input placeholder="Password" id="password" />&nbsp<button id="setPassword">Set
+                                Password</button>
                         </div>
                     </details>
                     <details>
                         <summary class="detailText">Factory</summary>
                         <div class="detailContainer">
                             <input placeholder="Cash" type="number" min=0 id="cash" />&nbsp<button id="setCash">Set
-                                Cash</button><br><br>
-                            <button id="antiGlitch">Prevent Glitches</button><br><br>
-                            <button id="maxBlooks">Max Blooks</button><br><br>
+                                Cash</button><br>
+                            <button id="antiGlitch">Prevent Glitches</button><br>
+                            <button id="maxBlooks">Max Blooks</button><br>
                             <button id="allMega">Set all Mega Bot</button>
                         </div>
                     </details>
@@ -71,7 +74,7 @@
                         <summary class="detailText">Fishing Frenzy</summary>
                         <div class="detailContainer"><input placeholder="Lure" max=5 min=1 type="number" maxlength=1
                                 style="width: 37px;" id="lureLevel" />&nbsp<button id="setLure">Set
-                                Lure</button><br><br>
+                                Lure</button><br>
                             <input placeholder="Weight" type="number" min=0 id="weight" />&nbsp<button
                                 id="setWeight">Set
                                 Weight</button>
@@ -80,11 +83,7 @@
                     <details>
                         <summary class="detailText">Gold Quest</summary>
                         <div class="detailContainer">
-                            <button id="chestESP">Chest ESP</button><text style="color: black;"> &#9888; (Note: auto
-                                answer
-                                may
-                                interfere
-                                with this, and it may break after a while)</text><br><br>
+                            <button id="chestESP">Chest ESP</button><br>
                             <input placeholder="Gold" type="number" min=0 id="gold" />&nbsp<button id="setGold">Set
                                 Gold</button>
                         </div>
@@ -98,15 +97,25 @@
                         <div class="detailContainer">
                             <input placeholder="Round" type="number" min=0 id="round" />&nbsp<button id="setRound">Set
                                 Round</button><br>
-                            <input placeholder="Tokens" type="number" min=0 id="tokens" />&nbsp<button id="setTokens">Set
+                            <input placeholder="Tokens" type="number" min=0 id="tokens" />&nbsp<button
+                                id="setTokens">Set
                                 Tokens</button><br>
-                            <input placeholder="Damage" type="number" min=0 id="damage" />&nbsp<button id="setDamage">Set
+                            <input placeholder="Damage" type="number" min=0 id="damage" />&nbsp<button
+                                id="setDamage">Set
                                 Damage</button><br>
                             <button id="setPrices">Sell for True Value</button><br>
                             <button id="allFree">Everything is Free</button><br>
                             <button id="clearEnemies">Remove On-screen Enemies</button><br>
                             <button id="removeDucks">Remove Ducks</button><br>
                             <button id="removeObsticles">Place towers anywhere</button>
+                        </div>
+                    </details>
+                    <details>
+                        <summary class="detailText">Tower of Doom</summary>
+                        <div class="detailContainer">
+                            <input placeholder="Coins" type="number" min=0 id="doom" />&nbsp<button id="setDoom">Set
+                                Coins</button><br>
+                            <button id="lowerStats">Lower Enemy Stats</button>
                         </div>
                     </details>
                 </div>

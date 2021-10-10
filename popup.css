@@ -19,7 +19,7 @@ button {
     font-family: inherit;
     font-size: 0.8em;
     border-radius: 4px;
-    border: 2px solid #3a3a3a;
+    border: 2px solid black;
     height: 20px;
     margin: auto;
     text-align: center;
@@ -44,8 +44,8 @@ input {
     font-size: 0.8em;
     font-weight: bold;
     height: 16px;
-    color: #3a3a3a;
-    border: 2px solid #3a3a3a;
+    color: black;
+    border: 2px solid black;
     border-radius: 4px;
     margin: 0 auto 4px;
     align-items: center;
@@ -92,7 +92,7 @@ body {
     font-size: 25px;
     font-weight: 700;
     text-align: left;
-    color: #3a3a3a;
+    color: black;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -104,7 +104,7 @@ body {
     font-size: 17px;
     font-weight: 700;
     text-align: left;
-    color: #3a3a3a;
+    color: black;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -144,5 +144,5 @@ body {
 br {
     display: block;
     content: "";
-    margin-top: 11px;
+    margin-top: 5.5px;
 }

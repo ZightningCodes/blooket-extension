@@ -68,6 +68,12 @@ document.addEventListener('DOMContentLoaded', function () {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setCrypto', args: [Number(crypto.value)] })
         })
     }, false)
+    document.getElementById('setPassword').addEventListener('click', async () => {
+        let crypto = document.getElementById('password')
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setPassword', args: [crypto.value] })
+        })
+    }, false)
     document.getElementById('setLure').addEventListener('click', async () => {
         let value = document.getElementById('lureLevel')
         if (!Number(value.value)) value.value = "";
@@ -165,6 +171,18 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('removeObsticles').addEventListener('click', async () => {
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'removeObsticles' })
+        })
+    }, false)
+    document.getElementById('lowerStats').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'lowerStats' })
+        })
+    }, false)
+    document.getElementById('setDoom').addEventListener('click', async () => {
+        let value = document.getElementById('doom')
+        if (!Number(value.value)) value.value = "";
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setDoom', args: [Number(value.value)] })
         })
     }, false)
 }, false)

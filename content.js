@@ -34,6 +34,7 @@ let Cheats = {
     'blookSpoof': { run: blookSpoof },
     'getPassword': { run: getPassword },
     'setCrypto': { run: setCrypto },
+    'setPassword': { run: setPassword },
     'setLure': { run: setLure },
     'setWeight': { run: setWeight },
     'setCoins': { run: setCoins },
@@ -50,13 +51,14 @@ let Cheats = {
     'allFree': { run: allFree },
     'clearEnemies': { run: clearEnemies },
     'removeDucks': { run: removeDucks },
-    'removeObsticles': { run: removeObsticles }
+    'removeObsticles': { run: removeObsticles },
+    'lowerStats': { run: lowerStats },
+    'setDoom': { run: setDoom }
 };
 chrome.runtime.onMessage.addListener((message) => {
     message.cheat && Cheats[message.cheat].run(message.args);
 });
 async function getTokens() {
-    console.log('hello')
     var name = window.jwt_decode(token.replace("JWT ", "")).name;
     fetch("https://api.blooket.com/api/users/addtokens", {
         headers: {
@@ -241,7 +243,10 @@ function getPassword() {
 function setCrypto(args) {
     if (window.location.pathname != '/play/hack') return alert('You must be in a crypto hack game!');
     setData({ crypto: args[0] });
-    updateData();
+}
+function setPassword(args) {
+    if (window.location.pathname != '/play/hack') return alert('You must be in a crypto hack game!');
+    setData({ password: args[0] });
 }
 function setLure(args) {
     let [lure] = args
@@ -412,6 +417,18 @@ function removeObsticles() {
     element.id = "removeObsticles";
     document.head.prepend(element);
     document.getElementById('removeObsticles').remove();
+}
+function lowerStats() {
+    if (window.location.pathname != '/tower/battle') return alert('You must be in a tower of doom game!');
+    if (getData().phase != 'select') return alert('You must be on the attribute selection page!');
+    let enemyCard = getData().enemyCard
+    setData({ enemyCard: { ...enemyCard, strength: 0, charisma: 0, wisdom: 0 } })
+}
+function setDoom(args) {
+    let [coins] = args;
+    if (!window.location.pathname.includes('/tower')) return alert('You must be in a tower of doom game!');
+    setData({ coins })
+    alert('Set coins to ' + coins)
 }
 
 
