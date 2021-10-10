@@ -1,6 +1,8 @@
 let token = localStorage.getItem("token");
-requestIdleCallback(init);
-const getData = () => JSON.parse(localStorage.data)[window.location.pathname]
+setInterval(() => {
+    if (!document.getElementById('getData')) init()
+}, 0)
+const getData = () => JSON.parse(localStorage.data)[window.location.pathname];
 setData = async (data) => {
     let src = chrome.runtime.getURL("utils/setData.js");
     let script = (await (await fetch(src)).text()).replace(/OneMinesraft26969/g, JSON.stringify(data));
@@ -29,13 +31,26 @@ let Cheats = {
     'autoAnswer': { run: autoAnswer },
     'chestESP': { run: chestESP },
     'setGold': { run: setGold },
-    'blookSpoof': { run: getBlooks },
+    'blookSpoof': { run: blookSpoof },
     'getPassword': { run: getPassword },
     'setCrypto': { run: setCrypto },
     'setLure': { run: setLure },
     'setWeight': { run: setWeight },
     'setCoins': { run: setCoins },
-    'infiniteFood': { run: infiniteFood }
+    'infiniteFood': { run: infiniteFood },
+    'setCash': { run: setCash },
+    'antiGlitch': { run: antiGlitch },
+    'maxBlooks': { run: maxBlooks },
+    'allMega': { run: allMega },
+    'instantWin': { run: instantWin },
+    'setRound': { run: setRound },
+    'setTokens': { run: setTokens },
+    'setDamage': { run: setDamage },
+    'setPrices': { run: setPrices },
+    'allFree': { run: allFree },
+    'clearEnemies': { run: clearEnemies },
+    'removeDucks': { run: removeDucks },
+    'removeObsticles': { run: removeObsticles }
 };
 chrome.runtime.onMessage.addListener((message) => {
     message.cheat && Cheats[message.cheat].run(message.args);
@@ -144,16 +159,15 @@ async function getOverflow(name) {
 }
 
 async function autoAnswer() {
-    if (!window.location.pathname.includes("play/")) return alert("You must be ingame to use this!");
+    if (!window.location.pathname.includes("play/") && window.location.pathname != '/defense') return alert("You must be ingame to use this!");
     alert("Auto answer enabled");
     let interval = setInterval(() => {
         let data = getData();
         let filter = a => a.innerHTML == data.question.correctAnswers[0] && a.parentElement.id != 'qText'
         if (document.getElementById("qText")) Array.from(document.querySelectorAll('div')).find(filter).parentElement.parentElement.click();
-        document.getElementsByClassName("arts__regularBody___1st6G-camelCase styles__background___30vso-camelCase")[0]?.click();
-        document.getElementsByClassName("styles__feedbackContainer___ttxTX-camelCase")[0]?.click();
-        document.getElementsByClassName("arts__regularBody___1st6G-camelCase")[0]?.click();
-        if (!window.location.pathname.includes("play/")) clearInterval(interval);
+        if (document.querySelector("#body > div.styles__questionContainer___1D5cX-camelCase > div")) document.querySelector("#body > div.styles__questionContainer___1D5cX-camelCase > div").click();
+        if (document.querySelector("div[class*='arts__regularBody___1st6G-camelCase styles__background___30vso-camelCase']")) document.querySelector("div[class*='arts__regularBody___1st6G-camelCase styles__background___30vso-camelCase']").click();
+        if (!window.location.pathname.includes("play/") && window.location.pathname != '/defense') clearInterval(interval);
     }, 0);
 }
 function checkDouble(list) {
@@ -188,7 +202,7 @@ sans-serif;
 -ms-user-select:none;
 user-select:none;
 border-color: black;
-line-height: 350px;`
+line-height: 375px;`
                 try { choiceDiv.children[i].appendChild(textElement); } catch (e) { }
             });
         };
@@ -202,10 +216,10 @@ function setGold(args) {
     alert('Set gold to ' + gold);
     updateData();
 }
-function getBlooks() {
+function blookSpoof() {
     if (window.location.pathname == '/blooks') {
         setData({ blooks: getData().allBlooks });
-        updateData();
+        //updateData();
     }
     else if (window.location.pathname == '/play/lobby') {
         setData({ lockedBlooks: [] });
@@ -249,6 +263,13 @@ function setCoins(args) {
     alert('Set cash to ' + cafeCash)
     updateData();
 }
+function setCash(args) {
+    let [cash] = args;
+    if (window.location.pathname != '/play/factory') return alert('You must be in a factory game!');
+    setData({ cash })
+    alert('Set cash to ' + cash)
+    updateData();
+}
 function infiniteFood() {
     if (!window.location.pathname.includes('/cafe')) return alert('You must be in a cafe game!');
     if (window.location.pathname != '/cafe/shop') Array.from(document.querySelectorAll('div')).find(e => e.innerHTML == "Upgrade Shop").click();
@@ -270,6 +291,129 @@ function infiniteFood() {
     }, 333)
     alert('Set food to infinity!');
 }
+function antiGlitch() {
+    if (window.location.pathname != '/play/factory') return alert('You must be in a factory game!')
+    let interval = setInterval(() => {
+        let newData = {
+            glitchMsg: "",
+            glitch: "",
+            glitcherName: "",
+            glitcherBlook: "",
+            bites: 0,
+            ads: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            hazards: ["", "", "", "", ""],
+            lol: false,
+            joke: false,
+            slow: false,
+            dance: false,
+            color: "",
+            popUpAmount: 0,
+            popUpType: "",
+        }
+        setData(newData);
+        if (window.location.pathname != '/play/factory') return clearInterval(interval);
+    }, 0)
+}
+function maxBlooks() {
+    if (window.location.pathname != '/play/factory') return alert('You must be in a factory game!')
+    let blooks = getData().blooks.map(x => ({ ...x, level: 4 }));
+    setData({ blooks });
+    updateData();
+}
+function allMega() {
+    if (window.location.pathname != '/play/factory') return alert('You must be in a factory game!')
+    let blooks = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map(x => ({
+        name: "Mega Bot",
+        color: "#d71f27",
+        class: "🤖",
+        rarity: "Legendary",
+        cash: [80000, 430000, 4200000, 62000000, 1000000000],
+        time: [5, 5, 3, 3, 3],
+        price: [7000000, 120000000, 1900000000, 35000000000],
+        active: false,
+        level: 4,
+        bonus: 5.5
+    }))
+    setData({ blooks });
+    updateData();
+}
+function instantWin() {
+    if (window.location.pathname != '/play/racing') return alert('You must be in a racing game!')
+    setData({ progress: getData().goalAmount });
+    setTimeout(() => {
+        Array.from(document.querySelectorAll('div')).find((a) =>
+            a.innerHTML == getData().question.correctAnswers[0] && a.parentElement.id != 'qText'
+        ).parentElement.parentElement.click();
+    }, 100)
+}
+function setTokens(args) {
+    let [tokens] = args;
+    if (window.location.pathname != '/defense') return alert('You must be in a tower defense game!');
+    setData({ tokens })
+    alert('Set tokens to ' + tokens)
+}
+function setRound(args) {
+    let [round] = args;
+    if (window.location.pathname != '/defense') return alert('You must be in a tower defense game!');
+    setData({ round })
+    alert('Set round to ' + round)
+}
+async function setDamage(args) {
+    let src = chrome.runtime.getURL("scripts/towerdefense/setDamage.js");
+    let script = (await (await fetch(src)).text()).replace(/OneMinesraft26969/g, args[0]);
+    let element = document.createElement("script");
+    element.type = "text/javascript";
+    element.innerHTML = script;
+    element.id = "setDamage";
+    document.head.prepend(element);
+    document.getElementById('setDamage').remove();
+}
+function setPrices() {
+    let src = chrome.runtime.getURL("scripts/towerdefense/setPrices.js");
+    let element = document.createElement("script");
+    element.type = "text/javascript";
+    element.src = src;
+    element.id = "setPrices";
+    document.head.prepend(element);
+    document.getElementById('setPrices').remove();
+}
+function allFree() {
+    let src = chrome.runtime.getURL("scripts/towerdefense/allFree.js");
+    let element = document.createElement("script");
+    element.type = "text/javascript";
+    element.src = src;
+    element.id = "allFree";
+    document.head.prepend(element);
+    document.getElementById('allFree').remove();
+}
+function clearEnemies() {
+    let src = chrome.runtime.getURL("scripts/towerdefense/clearEnemies.js");
+    let element = document.createElement("script");
+    element.type = "text/javascript";
+    element.src = src;
+    element.id = "clearEnemies";
+    document.head.prepend(element);
+    document.getElementById('clearEnemies').remove();
+}
+function removeDucks() {
+    let src = chrome.runtime.getURL("scripts/towerdefense/removeDucks.js");
+    let element = document.createElement("script");
+    element.type = "text/javascript";
+    element.src = src;
+    element.id = "removeDucks";
+    document.head.prepend(element);
+    document.getElementById('removeDucks').remove();
+}
+function removeObsticles() {
+    let src = chrome.runtime.getURL("scripts/towerdefense/removeObsticles.js");
+    let element = document.createElement("script");
+    element.type = "text/javascript";
+    element.src = src;
+    element.id = "removeObsticles";
+    document.head.prepend(element);
+    document.getElementById('removeObsticles').remove();
+}
+
 
 
 
@@ -280,5 +424,4 @@ function init() {
     element.src = src;
     element.id = "getData";
     document.head.prepend(element);
-    document.getElementById('getData').remove();
 }

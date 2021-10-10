@@ -46,11 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, false)
     document.getElementById('setGold').addEventListener('click', async () => {
         let gold = document.getElementById('gold')
-        if (!Number(gold.value)) {
-            gold.value = "";
-            gold.placeholder = "Invalid amount!";
-            return setTimeout(() => { gold.placeholder = "Gold" }, 1500)
-        }
+        if (!Number(gold.value)) gold.value = "";
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setGold', args: [Number(gold.value)] })
         })
@@ -67,13 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, false)
     document.getElementById('setCrypto').addEventListener('click', async () => {
         let crypto = document.getElementById('crypto')
-        if (!Number(crypto.value)) {
-            crypto.value = "";
-            crypto.placeholder = "Invalid amount!";
-            return setTimeout(() => {
-                crypto.placeholder = "Crypto"
-            }, 1500)
-        }
+        if (!Number(crypto.value)) crypto.value = "";
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setCrypto', args: [Number(crypto.value)] })
         })
@@ -102,6 +92,79 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('infiniteFood').addEventListener('click', async () => {
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'infiniteFood' })
+        })
+    }, false)
+    document.getElementById('antiGlitch').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'antiGlitch' })
+        })
+    }, false)
+    document.getElementById('maxBlooks').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'maxBlooks' })
+        })
+    }, false)
+    document.getElementById('allMega').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'allMega' })
+        })
+    }, false)
+    document.getElementById('setCash').addEventListener('click', async () => {
+        let value = document.getElementById('cash')
+        if (!Number(value.value)) value.value = "";
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setCash', args: [Number(value.value)] })
+        })
+    }, false)
+    document.getElementById('instantWin').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'instantWin' })
+        })
+    }, false)
+    document.getElementById('setRound').addEventListener('click', async () => {
+        let value = document.getElementById('round')
+        if (!Number(value.value)) value.value = "";
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setRound', args: [Number(value.value)] })
+        })
+    }, false)
+    document.getElementById('setTokens').addEventListener('click', async () => {
+        let value = document.getElementById('tokens')
+        if (!Number(value.value)) value.value = "";
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setTokens', args: [Number(value.value)] })
+        })
+    }, false)
+    document.getElementById('setDamage').addEventListener('click', async () => {
+        let value = document.getElementById('damage')
+        if (!Number(value.value)) value.value = "";
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setDamage', args: [Number(value.value)] })
+        })
+    }, false)
+    document.getElementById('setPrices').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setPrices' })
+        })
+    }, false)
+    document.getElementById('allFree').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'allFree' })
+        })
+    }, false)
+    document.getElementById('clearEnemies').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'clearEnemies' })
+        })
+    }, false)
+    document.getElementById('removeDucks').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'removeDucks' })
+        })
+    }, false)
+    document.getElementById('removeObsticles').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'removeObsticles' })
         })
     }, false)
 }, false)

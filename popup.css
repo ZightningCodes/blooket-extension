@@ -1,13 +1,54 @@
-button {
+/*button {
     font-family: inherit;
     font-size: 0.8em;
     font-weight: bold;
+    border-radius: 2px;
+    border: none;
+    background-color: #dedede;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-left: 2.5px;
+}
+button:hover {
+    background-color: rgb(0, 238, 255);
+    transform: scale(1.05);
+}*/
+
+button {
+    background: none;
+    font-family: inherit;
+    font-size: 0.8em;
+    border-radius: 4px;
+    border: 2px solid #3a3a3a;
+    height: 20px;
+    margin: auto;
+    text-align: center;
+    outline: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    transition: all .2s cubic-bezier(.39, .5, .15, 1.36);
+    font-weight: bold
+}
+
+button:hover {
+    border: 2px solid rgb(11, 194, 207);
+    color: rgb(11, 194, 207);
+    transform: scale(1.05);
 }
 
 input {
     font-family: inherit;
     font-size: 0.8em;
     font-weight: bold;
+    height: 16px;
+    color: #3a3a3a;
+    border: 2px solid #3a3a3a;
+    border-radius: 4px;
+    margin: 0 auto 4px;
+    align-items: center;
 }
 
 body {
@@ -33,7 +74,7 @@ body {
 
 .detailText:hover {
     color: rgb(11, 194, 207);
-    transform: scale(0.985)
+    transform: scale(0.990)
 }
 
 .h1 {

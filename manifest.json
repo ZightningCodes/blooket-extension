@@ -31,5 +31,11 @@
         "default_popup": "popup.html",
         "default_title": "Blooket Hack"
     },
-    "web_accessible_resources" : ["*ata.js"]
+    "web_accessible_resources": [
+        "*ata.js",
+        "scripts/*"
+    ],
+    "icons": {
+        "1024": "icons/1024.png"
+    }
 }
