@@ -1,5 +1,30 @@
 const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 document.addEventListener('DOMContentLoaded', function () {
+
+    if (!localStorage.options) localStorage.options = JSON.stringify({ darkMode: false, color: '#0bc3d0' })
+
+    if (JSON.parse(localStorage.options).darkMode) {
+        document.getElementById('darkMode').click();
+        document.getElementById('theme').href = 'css/dark.css';
+    } else document.getElementById('theme').href = 'css/light.css';
+
+    document.getElementById('colorSetting').value = JSON.parse(localStorage.options).color;
+    updateColor()
+
+    document.getElementById('darkMode').addEventListener('click', async () => {
+        options = JSON.parse(localStorage.options ? localStorage.options : '{}');
+        options.darkMode = document.querySelector("#darkMode").checked
+        localStorage.options = JSON.stringify(options);
+        if (JSON.parse(localStorage.options).darkMode) document.getElementById('theme').href = 'css/dark.css';
+        else document.getElementById('theme').href = 'css/light.css';
+    })
+
+    document.getElementById('colorSetting').addEventListener('change', updateColor)
+
+    document.getElementById('reset').addEventListener('click', () => {
+        document.querySelector('#darkMode').checked && document.querySelector('#darkMode').click(); document.querySelector('#colorSetting').value = '#0bc3d0'; updateColor()
+    })
+
     document.getElementById('getTokens').addEventListener('click', async () => {
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'getTokens' })
@@ -37,6 +62,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('autoAnswer').addEventListener('click', async () => {
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'autoAnswer' })
+        })
+    }, false)
+    document.getElementById('highlightAnswer').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'highlightAnswer' })
         })
     }, false)
     document.getElementById('chestESP').addEventListener('click', async () => {
@@ -115,6 +145,11 @@ document.addEventListener('DOMContentLoaded', function () {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'allMega' })
         })
     }, false)
+    document.getElementById('alwaysMega').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'alwaysMega' })
+        })
+    }, false)
     document.getElementById('setCash').addEventListener('click', async () => {
         let value = document.getElementById('cash')
         if (!Number(value.value)) value.value = "";
@@ -186,3 +221,16 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     }, false)
 }, false)
+async function updateColor() {
+    options = JSON.parse(localStorage.options);
+    let color = document.getElementById('colorSetting').value
+    options.color = color;
+    localStorage.options = JSON.stringify(options)
+
+    if (document.getElementById('color')) document.getElementById('color').remove();
+    let script = `button:hover { border: 2px solid #0bc3d0; color: #0bc3d0; } .detailText:hover { color: #0bc3d0; } .color:hover { border: 2px solid #0bc3d0; }`.replace(/#0bc3d0/g, color);
+    let element = document.createElement("style");
+    element.innerHTML = script;
+    element.id = "color";
+    document.head.append(element);
+}

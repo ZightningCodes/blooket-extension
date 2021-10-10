@@ -33,7 +33,8 @@
     },
     "web_accessible_resources": [
         "*ata.js",
-        "scripts/*"
+        "scripts/*",
+        "css/*"
     ],
     "icons": {
         "1024": "icons/1024.png"

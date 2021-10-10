@@ -13,7 +13,7 @@ setData = async (data) => {
     document.head.prepend(element);
     document.getElementById('setData').remove();
 }
-updateData = () => {
+/*updateData = () => {
     let src = chrome.runtime.getURL("utils/updateData.js");
     let element = document.createElement("script");
     element.type = "text/javascript";
@@ -23,12 +23,13 @@ updateData = () => {
         document.head.prepend(element);
         document.getElementById('updateData').remove();
     }, 50)
-}
+}*/
 let Cheats = {
     'getTokens': { run: getTokens },
     'openBoxes': { run: openBoxes },
     'autoSell': { run: autoSell },
     'autoAnswer': { run: autoAnswer },
+    'highlightAnswer': { run: highlightAnswer },
     'chestESP': { run: chestESP },
     'setGold': { run: setGold },
     'blookSpoof': { run: blookSpoof },
@@ -43,6 +44,7 @@ let Cheats = {
     'antiGlitch': { run: antiGlitch },
     'maxBlooks': { run: maxBlooks },
     'allMega': { run: allMega },
+    'alwaysMega': { run: alwaysMega },
     'instantWin': { run: instantWin },
     'setRound': { run: setRound },
     'setTokens': { run: setTokens },
@@ -161,14 +163,29 @@ async function getOverflow(name) {
 }
 
 async function autoAnswer() {
-    if (!window.location.pathname.includes("play/") && window.location.pathname != '/defense') return alert("You must be ingame to use this!");
+    if (!window.location.pathname.includes("play/") && window.location.pathname != '/defense' && !window.location.pathname.includes('tower')) return alert("You must be ingame to use this!");
     alert("Auto answer enabled");
     let interval = setInterval(() => {
         let data = getData();
         let filter = a => a.innerHTML == data.question.correctAnswers[0] && a.parentElement.id != 'qText'
         if (document.getElementById("qText")) Array.from(document.querySelectorAll('div')).find(filter).parentElement.parentElement.click();
+        if (document.querySelector("div[class*='styles__feedbackContainer___IASS4-camelCase']")) document.querySelector("div[class*='styles__feedbackContainer___IASS4-camelCase']").click();
         if (document.querySelector("#body > div.styles__questionContainer___1D5cX-camelCase > div")) document.querySelector("#body > div.styles__questionContainer___1D5cX-camelCase > div").click();
         if (document.querySelector("div[class*='arts__regularBody___1st6G-camelCase styles__background___30vso-camelCase']")) document.querySelector("div[class*='arts__regularBody___1st6G-camelCase styles__background___30vso-camelCase']").click();
+        if (!window.location.pathname.includes("play/") && window.location.pathname != '/defense') clearInterval(interval);
+    }, 0);
+}
+async function highlightAnswer() {
+    if (!window.location.pathname.includes("play/") && window.location.pathname != '/defense') return alert("You must be ingame to use this!");
+    alert("Highlight answers enabled");
+    let interval = setInterval(() => {
+        let data = getData();
+        let correct = a => data.question.correctAnswers.includes(a.innerHTML) && a.parentElement.id != 'qText'
+        let wrong = a => a.parentElement.id != 'qText' && a.className.includes('answerContainer') && !data.question.correctAnswers.includes(a.children[0].children[0].innerHTML)
+        if (document.getElementById("qText")) {
+            Array.from(document.querySelectorAll('div')).filter(correct).forEach(x => x.parentElement.parentElement.style = "background-color: rgb(0, 207, 119);");
+            if (Array.from(document.querySelectorAll('div')).filter(wrong).length) Array.from(document.querySelectorAll('div')).filter(wrong).forEach(x => x.style = "background-color: rgb(255, 70, 43);");
+        }
         if (!window.location.pathname.includes("play/") && window.location.pathname != '/defense') clearInterval(interval);
     }, 0);
 }
@@ -216,16 +233,16 @@ function setGold(args) {
     if (window.location.pathname != '/play/gold') return alert('You must be in a gold quest game!');
     setData({ gold });
     alert('Set gold to ' + gold);
-    updateData();
+    //updateData();
 }
 function blookSpoof() {
     if (window.location.pathname == '/blooks') {
         setData({ blooks: getData().allBlooks });
-        //updateData();
+        ////updateData();
     }
     else if (window.location.pathname == '/play/lobby') {
         setData({ lockedBlooks: [] });
-        updateData();
+        //updateData();
     }
     else alert('This can only be used on the blook page or in a game lobby!');
 }
@@ -259,21 +276,21 @@ function setWeight(args) {
     if (window.location.pathname != '/play/fishing') return alert('You must be in a fishing frenzy game!');
     setData({ weight })
     alert('Set weight to ' + weight)
-    updateData();
+    //updateData();
 }
 function setCoins(args) {
     let [cafeCash] = args;
     if (!window.location.pathname.includes('/cafe')) return alert('You must be in a cafe game!');
     setData({ cafeCash })
     alert('Set cash to ' + cafeCash)
-    updateData();
+    //updateData();
 }
 function setCash(args) {
     let [cash] = args;
     if (window.location.pathname != '/play/factory') return alert('You must be in a factory game!');
     setData({ cash })
     alert('Set cash to ' + cash)
-    updateData();
+    //updateData();
 }
 function infiniteFood() {
     if (!window.location.pathname.includes('/cafe')) return alert('You must be in a cafe game!');
@@ -281,16 +298,13 @@ function infiniteFood() {
     let items = getData().items;
     Object.keys(items).forEach(item => items[item] = 5);
     setData({ items })
-    updateData();
     setTimeout(() => {
         setData({ items })
-        updateData();
         setTimeout(() => {
             Array.from(document.querySelectorAll('div')).find(e => e.innerHTML == "Back").click();
             let foods = getData().foods.map(food => ({ name: food.name, level: 5, stock: 999999 }));
             setTimeout(() => {
                 setData({ foods });
-                updateData();
             }, 333)
         }, 333);
     }, 333)
@@ -323,7 +337,7 @@ function maxBlooks() {
     if (window.location.pathname != '/play/factory') return alert('You must be in a factory game!')
     let blooks = getData().blooks.map(x => ({ ...x, level: 4 }));
     setData({ blooks });
-    updateData();
+    //updateData();
 }
 function allMega() {
     if (window.location.pathname != '/play/factory') return alert('You must be in a factory game!')
@@ -340,7 +354,30 @@ function allMega() {
         bonus: 5.5
     }))
     setData({ blooks });
-    updateData();
+    //updateData();
+}
+function alwaysMega() {
+    if (window.location.pathname != '/play/factory') return alert('You must be in a factory game!')
+    let interval = setInterval(() => {
+        if (window.location.pathname != '/play/factory') return clearInterval(interval);
+        try {
+            if (getData().progress != 3 || !getData().choices.length) return;
+            let choices = [{
+                name: "Mega Bot",
+                color: "#d71f27",
+                class: "🤖",
+                rarity: "Legendary",
+                cash: [80000, 430000, 4200000, 62000000, 1000000000],
+                time: [5, 5, 3, 3, 3],
+                price: [7000000, 120000000, 1900000000, 35000000000],
+                active: false,
+                level: 4,
+                bonus: 5.5
+            }, getData().choices[1], getData().choices[2]]
+            setData({ choices, progress: 0 });
+            //updateData();
+        } catch (e) { console.log(e) }
+    }, 0)
 }
 function instantWin() {
     if (window.location.pathname != '/play/racing') return alert('You must be in a racing game!')
