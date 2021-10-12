@@ -22,7 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('colorSetting').addEventListener('change', updateColor)
 
     document.getElementById('reset').addEventListener('click', () => {
-        document.querySelector('#darkMode').checked && document.querySelector('#darkMode').click(); document.querySelector('#colorSetting').value = '#0bc3d0'; updateColor()
+        delete localStorage.options;
+        document.querySelector('#darkMode').checked && document.querySelector('#darkMode').click();
+        document.querySelector('#colorSetting').value = '#0bc3d0';
+        updateColor()
     })
 
     document.getElementById('getTokens').addEventListener('click', async () => {
@@ -72,6 +75,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('chestESP').addEventListener('click', async () => {
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'chestESP' })
+        })
+    }, false)
+    document.getElementById('takeAll').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'takeAll' })
         })
     }, false)
     document.getElementById('setGold').addEventListener('click', async () => {
@@ -213,11 +221,43 @@ document.addEventListener('DOMContentLoaded', function () {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'lowerStats' })
         })
     }, false)
+    document.getElementById('maxStats').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'maxStats' })
+        })
+    }, false)
     document.getElementById('setDoom').addEventListener('click', async () => {
         let value = document.getElementById('doom')
         if (!Number(value.value)) value.value = "";
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setDoom', args: [Number(value.value)] })
+        })
+    }, false)
+    document.getElementById('maxResources').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'maxResources' })
+        })
+    }, false)
+    document.getElementById('setGuests').addEventListener('click', async () => {
+        let value = document.getElementById('guests')
+        if (!Number(value.value)) value.value = "";
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'setGuests', args: [Number(value.value)] })
+        })
+    }, false)
+    document.getElementById('noTaxes').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'noTaxes' })
+        })
+    }, false)
+    document.getElementById('skipGuest').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'skipGuest' })
+        })
+    }, false)
+    document.getElementById('choiceESP').addEventListener('click', async () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { cheat: 'choiceESP' })
         })
     }, false)
 }, false)
@@ -228,7 +268,7 @@ async function updateColor() {
     localStorage.options = JSON.stringify(options)
 
     if (document.getElementById('color')) document.getElementById('color').remove();
-    let script = `button:hover { border: 2px solid #0bc3d0; color: #0bc3d0; } .detailText:hover { color: #0bc3d0; } .color:hover { border: 2px solid #0bc3d0; }`.replace(/#0bc3d0/g, color);
+    let script = `button:hover { border: 2px solid #0bc3d0; color: #0bc3d0; } input:hover { border: 2px solid #0bc3d0; color: #0bc3d0; } .detailText:hover { color: #0bc3d0; } .color:hover { border: 2px solid #0bc3d0; }`.replace(/#0bc3d0/g, color);
     let element = document.createElement("style");
     element.innerHTML = script;
     element.id = "color";

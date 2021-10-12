@@ -51,9 +51,15 @@ input {
     color: black;
     border: 2px solid black;
     border-radius: 4px;
-    margin: 0 auto 4px;
     align-items: center;
     background: none;
+    transition: 0.2s;
+}
+
+input:hover {
+    border: 2px solid rgb(11, 194, 207);
+    color: rgb(11, 194, 207);
+    transform: scale(1.05);
 }
 
 .setting {

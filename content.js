@@ -13,17 +13,6 @@ setData = async (data) => {
     document.head.prepend(element);
     document.getElementById('setData').remove();
 }
-/*updateData = () => {
-    let src = chrome.runtime.getURL("utils/updateData.js");
-    let element = document.createElement("script");
-    element.type = "text/javascript";
-    element.src = src;
-    element.id = "updateData";
-    setTimeout(() => {
-        document.head.prepend(element);
-        document.getElementById('updateData').remove();
-    }, 50)
-}*/
 let Cheats = {
     'getTokens': { run: getTokens },
     'openBoxes': { run: openBoxes },
@@ -32,6 +21,7 @@ let Cheats = {
     'highlightAnswer': { run: highlightAnswer },
     'chestESP': { run: chestESP },
     'setGold': { run: setGold },
+    'takeAll': { run: takeAll },
     'blookSpoof': { run: blookSpoof },
     'getPassword': { run: getPassword },
     'setCrypto': { run: setCrypto },
@@ -55,7 +45,13 @@ let Cheats = {
     'removeDucks': { run: removeDucks },
     'removeObsticles': { run: removeObsticles },
     'lowerStats': { run: lowerStats },
-    'setDoom': { run: setDoom }
+    'maxStats': { run: maxStats },
+    'setDoom': { run: setDoom },
+    'maxResources': { run: maxResources },
+    'setGuests': { run: setGuests },
+    'noTaxes': { run: noTaxes },
+    'skipGuest': { run: skipGuest },
+    'choiceESP': { run: choiceESP }
 };
 chrome.runtime.onMessage.addListener((message) => {
     message.cheat && Cheats[message.cheat].run(message.args);
@@ -163,7 +159,7 @@ async function getOverflow(name) {
 }
 
 async function autoAnswer() {
-    if (!window.location.pathname.includes("play/") && window.location.pathname != '/defense' && !window.location.pathname.includes('tower')) return alert("You must be ingame to use this!");
+    if (!ingame()) return alert("You must be ingame to use this!");
     alert("Auto answer enabled");
     let interval = setInterval(() => {
         let data = getData();
@@ -172,11 +168,11 @@ async function autoAnswer() {
         if (document.querySelector("div[class*='styles__feedbackContainer___IASS4-camelCase']")) document.querySelector("div[class*='styles__feedbackContainer___IASS4-camelCase']").click();
         if (document.querySelector("#body > div.styles__questionContainer___1D5cX-camelCase > div")) document.querySelector("#body > div.styles__questionContainer___1D5cX-camelCase > div").click();
         if (document.querySelector("div[class*='arts__regularBody___1st6G-camelCase styles__background___30vso-camelCase']")) document.querySelector("div[class*='arts__regularBody___1st6G-camelCase styles__background___30vso-camelCase']").click();
-        if (!window.location.pathname.includes("play/") && window.location.pathname != '/defense') clearInterval(interval);
+        if (!ingame()) clearInterval(interval);
     }, 0);
 }
 async function highlightAnswer() {
-    if (!window.location.pathname.includes("play/") && window.location.pathname != '/defense') return alert("You must be ingame to use this!");
+    if (!ingame()) return alert("You must be ingame to use this!");
     alert("Highlight answers enabled");
     let interval = setInterval(() => {
         let data = getData();
@@ -184,9 +180,9 @@ async function highlightAnswer() {
         let wrong = a => a.parentElement.id != 'qText' && a.className.includes('answerContainer') && !data.question.correctAnswers.includes(a.children[0].children[0].innerHTML)
         if (document.getElementById("qText")) {
             Array.from(document.querySelectorAll('div')).filter(correct).forEach(x => x.parentElement.parentElement.style = "background-color: rgb(0, 207, 119);");
-            if (Array.from(document.querySelectorAll('div')).filter(wrong).length) Array.from(document.querySelectorAll('div')).filter(wrong).forEach(x => x.style = "background-color: rgb(255, 70, 43);");
+            if (Array.from(document.querySelectorAll('div')).filter(wrong).length) Array.from(document.querySelectorAll('div')).filter(wrong).forEach(x => x.style = "background-color: rgb(225, 40, 33);");
         }
-        if (!window.location.pathname.includes("play/") && window.location.pathname != '/defense') clearInterval(interval);
+        if (!ingame()) clearInterval(interval);
     }, 0);
 }
 function checkDouble(list) {
@@ -234,6 +230,15 @@ function setGold(args) {
     setData({ gold });
     alert('Set gold to ' + gold);
     //updateData();
+}
+function takeAll() {
+    let src = chrome.runtime.getURL("scripts/gold/takeAll.js");
+    let element = document.createElement("script");
+    element.type = "text/javascript";
+    element.src = src;
+    element.id = "takeAll";
+    document.head.prepend(element);
+    document.getElementById('takeAll').remove();
 }
 function blookSpoof() {
     if (window.location.pathname == '/blooks') {
@@ -294,20 +299,27 @@ function setCash(args) {
 }
 function infiniteFood() {
     if (!window.location.pathname.includes('/cafe')) return alert('You must be in a cafe game!');
-    if (window.location.pathname != '/cafe/shop') Array.from(document.querySelectorAll('div')).find(e => e.innerHTML == "Upgrade Shop").click();
-    let items = getData().items;
-    Object.keys(items).forEach(item => items[item] = 5);
-    setData({ items })
-    setTimeout(() => {
+    if (window.location.pathname != '/cafe/shop') try { Array.from(document.querySelectorAll('div')).find(e => e.innerHTML == "Upgrade Shop").click(); } catch (e) { }
+    try {
+        let items = getData().items;
+        Object.keys(items).forEach(item => items[item] = 5);
         setData({ items })
         setTimeout(() => {
-            Array.from(document.querySelectorAll('div')).find(e => e.innerHTML == "Back").click();
-            let foods = getData().foods.map(food => ({ name: food.name, level: 5, stock: 999999 }));
+            setData({ items })
             setTimeout(() => {
-                setData({ foods });
-            }, 333)
-        }, 333);
-    }, 333)
+                Array.from(document.querySelectorAll('div')).find(e => e.innerHTML == "Back").click();
+                let foods = getData().foods.map(food => ({ name: food.name, level: 5, stock: 999999 }));
+                setTimeout(() => {
+                    setData({ foods });
+                }, 333)
+            }, 333);
+        }, 333)
+    } catch (e) {
+        try {
+            let foods = getData().foods.map(food => ({ name: food.name, level: 5, stock: 999999 }));
+            setData({ foods });
+        } catch (e) { }
+    }
     alert('Set food to infinity!');
 }
 function antiGlitch() {
@@ -461,15 +473,86 @@ function lowerStats() {
     let enemyCard = getData().enemyCard
     setData({ enemyCard: { ...enemyCard, strength: 0, charisma: 0, wisdom: 0 } })
 }
+function maxStats() {
+    if (window.location.pathname != '/tower/battle') return alert('You must be in a tower of doom game!');
+    if (getData().phase != 'select') return alert('You must be on the attribute selection page!');
+    let myCard = getData().myCard
+    setData({ myCard: { ...myCard, strength: 20, charisma: 20, wisdom: 20 } })
+}
 function setDoom(args) {
     let [coins] = args;
     if (!window.location.pathname.includes('/tower')) return alert('You must be in a tower of doom game!');
     setData({ coins })
     alert('Set coins to ' + coins)
 }
+function maxResources() {
+    if (window.location.pathname != '/kingdom') return alert('You must be in a crazy kingdom game!');
+    setData({ materials: 100, people: 100, happiness: 100, gold: 100 })
+}
+function setGuests(args) {
+    let [guestScore] = args;
+    if (window.location.pathname != '/kingdom') return alert('You must be in a crazy kingdom game!');
+    setData({ guestScore })
+    alert('Set guests to ' + guestScore)
+}
+function noTaxes() {
+    let src = chrome.runtime.getURL("scripts/crazykingdom/noTaxes.js");
+    let element = document.createElement("script");
+    element.type = "text/javascript";
+    element.src = src;
+    element.id = "noTaxes";
+    document.head.prepend(element);
+    document.getElementById('noTaxes').remove();
+}
+function skipGuest() {
+    let src = chrome.runtime.getURL("scripts/crazykingdom/skipGuest.js");
+    let element = document.createElement("script");
+    element.type = "text/javascript";
+    element.src = src;
+    element.id = "skipGuest";
+    document.head.prepend(element);
+    document.getElementById('skipGuest').remove();
+}
+function choiceESP() {
+    if (window.location.pathname != '/kingdom') return alert('You must be in a crazy kingdom game!');
+    let interval = setInterval(() => {
+        try {
+            if (window.location.pathname != '/kingdom') return clearInterval(interval);
+            Array.from(document.getElementsByClassName('choiceESP')).forEach(x => x.remove())
+            let elements = {
+                materials: Array.from(document.querySelectorAll('div')).find(x => Array.from(x.children).find(e => e.className.includes('tree'))),
+                people: Array.from(document.querySelectorAll('div')).find(x => Array.from(x.children).find(e => e.className.includes('users') && e.parentElement.className.includes('statContainer'))),
+                happiness: Array.from(document.querySelectorAll('div')).find(x => Array.from(x.children).find(e => e.className.includes('grin'))),
+                gold: Array.from(document.querySelectorAll('div')).find(x => Array.from(x.children).find(e => e.className.includes('coins')))
+            }
+            let data = getData().guest;
+            Object.entries(data.yes).forEach(x => {
+                if (x[0] == 'msg') return;
+                let element = document.createElement('div');
+                element.className = 'choiceESP';
+                element.style = 'font-size: 24px; color: rgb(75, 194, 46); font-weight: bolder;';
+                element.innerText = String(x[1])
+                elements[x[0]].appendChild(element);
+            })
+            Object.entries(data.no).forEach(x => {
+                if (x[0] == 'msg') return;
+                let element = document.createElement('div');
+                element.className = 'choiceESP';
+                element.style = 'font-size: 24px; color: darkred; font-weight: bolder;';
+                element.innerText = String(x[1])
+                elements[x[0]].appendChild(element);
+            })
+        } catch (e) { }
+    }, 0)
+}
 
 
 
+
+function ingame() {
+    let wlp = window.location.pathname;
+    return wlp.includes("play/") || wlp == '/defense' || wlp.includes('tower') || wlp.includes('cafe') || wlp.includes('kingdom');
+}
 
 function init() {
     let src = chrome.runtime.getURL("utils/data.js");
