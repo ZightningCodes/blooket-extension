@@ -3,13 +3,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!localStorage.options) localStorage.options = JSON.stringify({ darkMode: false, color: '#0bc3d0' })
 
+    let colors = [
+        '#ff0000', '#ff1c00', '#ff2b00', '#fe3700', '#fe4100',
+        '#fd4a00', '#fc5200', '#fa5a00', '#f96100', '#f76800',
+        '#f56f00', '#f37500', '#f07c00', '#ee8200', '#eb8800',
+        '#e78e00', '#e49300', '#e19900', '#dd9e00', '#d9a400',
+        '#d4a900', '#d0ae00', '#cbb300', '#c6b800', '#c1bd00',
+        '#bbc200', '#b6c700', '#b0cc00', '#a9d000', '#a2d500',
+        '#9bd900', '#93de00', '#8ae200', '#81e600', '#77eb00',
+        '#6bef00', '#5ef300', '#4df700', '#37fb00', '#00ff00',
+        '#00fd28', '#00fa3c', '#00f84d', '#00f55d', '#00f26b',
+        '#00ef79', '#00eb87', '#00e895', '#00e4a3', '#00e1b0',
+        '#00ddbe', '#00d9cb', '#00d5d8', '#00d1e5', '#00cdf2',
+        '#00c9fe', '#00c5ff', '#00c1ff', '#00bcff', '#00b8ff',
+        '#00b3ff', '#00afff', '#00aaff', '#00a5ff', '#00a0ff',
+        '#009bff', '#0095ff', '#008fff', '#0089ff', '#0082ff',
+        '#007bff', '#0073ff', '#006aff', '#0061ff', '#0056ff',
+        '#004aff', '#003cff', '#0029ff', '#0000ff', '#4400fa',
+        '#6000f4', '#7400ee', '#8500e8', '#9300e2', '#a000dc',
+        '#ab00d5', '#b500ce', '#bf00c8', '#c700c1', '#cf00ba',
+        '#d600b3', '#dc00ac', '#e200a6', '#e8009f', '#ed0098',
+        '#f10091', '#f5008a', '#f90084', '#fc007d', '#ff0077',
+        '#ff0070', '#ff006a', '#ff0064', '#ff005e', '#ff0058',
+        '#ff0052', '#ff004c', '#ff0046', '#ff0040', '#ff003b',
+        '#ff0035', '#ff002f', '#ff002a', '#ff0023', '#ff001d',
+        '#ff0015', '#ff000c'
+    ];    
+    setInterval(() => {
+        if (!JSON.parse(localStorage.options).chroma) return;
+        updateColor(colors[0]);
+        colors.push(colors.shift());
+    }, 50)
+
+    document.getElementById('darkMode').checked = JSON.parse(localStorage.options).darkMode;
+    document.getElementById('chroma').checked = JSON.parse(localStorage.options).chroma;
     if (JSON.parse(localStorage.options).darkMode) {
-        document.getElementById('darkMode').click();
         document.getElementById('theme').href = 'css/dark.css';
     } else document.getElementById('theme').href = 'css/light.css';
 
     document.getElementById('colorSetting').value = JSON.parse(localStorage.options).color;
-    updateColor()
+    updateColor(document.getElementById('colorSetting').value, false)
 
     document.getElementById('darkMode').addEventListener('click', async () => {
         options = JSON.parse(localStorage.options ? localStorage.options : '{}');
@@ -19,7 +52,16 @@ document.addEventListener('DOMContentLoaded', function () {
         else document.getElementById('theme').href = 'css/light.css';
     })
 
-    document.getElementById('colorSetting').addEventListener('change', updateColor)
+    document.getElementById('chroma').addEventListener('click', async () => {
+        options = JSON.parse(localStorage.options ? localStorage.options : '{}');
+        options.chroma = document.querySelector("#chroma").checked
+        localStorage.options = JSON.stringify(options);
+        if (!options.chroma) updateColor(document.getElementById('colorSetting').value);
+    })
+
+    document.getElementById('colorSetting').addEventListener('change', () => {
+        updateColor(document.getElementById('colorSetting').value, false)
+    })
 
     document.getElementById('reset').addEventListener('click', () => {
         delete localStorage.options;
@@ -261,14 +303,14 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     }, false)
 }, false)
-async function updateColor() {
+async function updateColor(hex, chroma = true) {
     options = JSON.parse(localStorage.options);
-    let color = document.getElementById('colorSetting').value
+    let color = hex
     options.color = color;
-    localStorage.options = JSON.stringify(options)
+    if (!chroma) localStorage.options = JSON.stringify(options)
 
     if (document.getElementById('color')) document.getElementById('color').remove();
-    let script = `button:hover { border: 2px solid #0bc3d0; color: #0bc3d0; } input:hover { border: 2px solid #0bc3d0; color: #0bc3d0; } .detailText:hover { color: #0bc3d0; } .color:hover { border: 2px solid #0bc3d0; }`.replace(/#0bc3d0/g, color);
+    let script = `button:hover { border: 2px solid #0bc3d0; color: #0bc3d0; } input:hover { border: 2px solid #0bc3d0; color: #0bc3d0; } .detailText:hover { color: #0bc3d0; } .color:hover { border: 2px solid #0bc3d0; }`.replace(/#0bc3d0/g, hex);
     let element = document.createElement("style");
     element.innerHTML = script;
     element.id = "color";
