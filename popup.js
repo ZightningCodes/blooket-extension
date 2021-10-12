@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!JSON.parse(localStorage.options).chroma) return;
         updateColor(colors[0]);
         colors.push(colors.shift());
-    }, 50)
+    }, 38)
 
     document.getElementById('darkMode').checked = JSON.parse(localStorage.options).darkMode;
     document.getElementById('chroma').checked = JSON.parse(localStorage.options).chroma;
