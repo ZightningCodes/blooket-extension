@@ -58,7 +58,7 @@ chrome.runtime.onMessage.addListener((message) => {
 });
 async function getTokens() {
     var name = window.jwt_decode(token.replace("JWT ", "")).name;
-    fetch("https://api.blooket.com/api/users/addtokens", {
+    fetch("https://api.blooket.com/api/users/add-rewards", {
         headers: {
             authorization: token,
             "content-type": "application/json;charset=UTF-8",
@@ -66,11 +66,12 @@ async function getTokens() {
         referrer: "https://www.blooket.com/",
         body: JSON.stringify({
             name,
-            addedTokens: 500
+            addedTokens: 500,
+            addedXp: 300
         }),
         method: "PUT"
     }).then(() => {
-        alert('Tokens added!')
+        alert('Tokens and XP added!')
     });
 }
 async function openBoxes(args) {
